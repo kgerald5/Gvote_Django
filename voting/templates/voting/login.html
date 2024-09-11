@@ -1,0 +1,61 @@
+{% extends "voting/base.html" %}
+{% block content %}
+
+    <style>
+        .custom-login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Full viewport height */
+        }
+
+        .custom-login-box {
+            width: 80%;  /* Adjust the percentage as needed */
+            max-width: 600px;  /* Maximum width */
+            background-color: #f7f7f7;  /* Example background color */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .custom-login-box {
+                width: 90%;
+            }
+        }
+    </style>
+
+    <div class="custom-login-container">
+        <div class="login-box custom-login-box">
+            <div class="login-logo">
+                <b>Gvote</b>
+            </div>
+
+            <div class="login-box-body">
+                <!-- <p class="login-box-msg">Sign in to start your session</p> -->
+
+                <form action="{% url 'account_login' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group has-feedback">
+                        <input type="text" class="form-control" name="email" placeholder="Email" required>
+                        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <input type="password" class="form-control" name="password" placeholder="Mot de passe" required>
+                        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <button type="submit" class="btn btn-success btn-block btn-flat" name="login"><i
+                                    class="fa fa-sign-in"></i> Se connecter</button>
+                        </div>
+                        <div class="pull-right col-xs-4">
+                            <a class="btn btn-warning btn-block btn-flat" href="{% url 'account_register' %}"><i class="fa fa-user-plus"></i> S'inscrire</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

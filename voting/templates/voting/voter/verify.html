@@ -1,0 +1,85 @@
+{% extends 'root.html' %}
+{% block content %}
+<section class="content">
+  <h1 class="page-header text-center title"><b>{{ TITLE }}</b></h1>
+<div class="row">
+<div class="col-sm-10 col-sm-offset-1">
+
+<div class="alert alert-danger alert-dismissible" id="alert" style="display:none;">
+<button type="button" class="close" data-dismiss="alert"
+aria-hidden="true">&times;</button>
+<span class="message"></span>
+</div>
+
+                  <!-- Voting Ballot -->
+<form method="POST" id="ballotForm" action="{% url 'verify_otp' %}">
+  {% csrf_token %}
+<div class="row">
+<div class="col-xs-12">
+  <div class="box box-solid" id="">
+      <div class="box-header with-border">
+          <h3 class="box-title"><b>Veuillez vérifier la propriété de ce compte.</b>
+              <hr>
+          </h3>
+      </div>
+      <div class="box-body">
+          <div id="candidate_list">
+              <p><span class="pull-right">
+                      <a id="request_otp"
+                          class="btn btn-success btn-sm btn-flat "><i
+                              class="fa fa-refresh"></i> Demander le mot de passe</a>
+                  </span>
+              </p>
+          </div>
+          <ul>
+              <p> Veuillez fournir le mot de passe envoyé à votre numéro de téléphone se terminant par  **-***-*{{ request.user.voter.phone|slice:"7:" }}</p>
+          </ul>
+          <hr />
+          <div class="form-group has-feedback">
+              <input type="text" class="form-control" name="otp" placeholder="OTP"
+                  required>
+              <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+          </div>
+          <button type="submit" class="btn btn-primary btn-flat" name="verify"><i
+            class="fa fa-check-square-o"></i> Vérifier le mot de passe</button>
+</div>
+    </div>
+      </div>
+       </div>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock content %}
+
+{% block custom_js %}
+  <script>
+    $("#request_otp").click(function(){
+      var button =  $("#request_otp");
+      button.attr("désactivé",true);
+      $.ajax({
+        url: "{% url 'resend_otp' %}",
+        type: 'GET',
+        
+        success: function(response){
+          console.log(response.data)
+          console.log(response)
+          if (response.error){
+            toastr.error(response.data,"Une erreur s'est produite lors de l'envoi du mot de passe");
+          }else{
+
+            toastr.success(response.data,"Réponse OTP");
+          }
+          button.attr("désactivé",false);
+
+        },
+        error: function(response){
+          toastr.error("Veuillez réessayer plus tard", "Erreur")
+          button.attr("désactivé",false);
+
+        },
+
+      });
+    });
+  </script>
+{% endblock custom_js %}

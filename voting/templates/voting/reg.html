@@ -1,0 +1,118 @@
+{% extends "voting/base.html" %}
+{% block content %}
+
+    <style>
+        .custom-login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Full viewport height */
+        }
+
+        .custom-login-box {
+            width: 80%;  /* Adjust the percentage as needed */
+            max-width: 600px;  /* Maximum width */
+            background-color: #f7f7f7;  /* Example background color */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .custom-login-box {
+                width: 90%;
+            }
+        }
+    </style>
+
+    <div class="custom-login-container">
+        <div class="login-box custom-login-box">
+            <div class="login-logo">
+                <b>Gvote</b>
+            </div>
+
+            <div class="login-box-body">
+                <!-- <p class="login-box-msg">Register an account</p> -->
+                <form action="{% url 'account_register' %}" method="POST">
+                    {% csrf_token %}
+
+                    <div class="modal-body">
+                        {% for field in form1 %}
+                        <div class="form-group has-feedback">
+                            <span class="text-danger">{{ field.errors }}</span>
+                            {{ field.label_tag }}
+                            {{ field }}
+                        </div>
+                        {% endfor %}
+
+                        {% for field in form2 %}
+                        <div class="form-group has-feedback">
+                            <span class="text-danger">{{ field.errors }}</span>
+                            {{ field.label_tag }}
+                            {{ field }}
+                        </div>
+                        {% endfor %}
+
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <button type="submit" class="btn btn-primary btn-block btn-flat" name="login">
+                                    <i class="fa fa-user-plus"></i> S'inscrire
+                                </button>
+                            </div>
+                            <div class="pull-right col-xs-6">
+                                <a class="btn btn-success btn-block btn-flat" href="{% url 'account_login' %}">
+                                    <i class="fa fa-sign-in"></i> Se connecter
+                                </a>
+                            </div>
+                        </div> 
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="register" tabindex="-1" role="dialog" aria-labelledby="register" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form action="{% url 'account_register' %}" method="POST">
+                    {% csrf_token %}
+
+                    <div class="modal-header">
+                        <p class="modal-title" id="register">Créer un nouveau compte 
+                            <span class="float-right">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="modal-body">
+                        {% for field in form1 %}
+                        <div class="form-group has-feedback">
+                            {{ field.errors }}
+                            {{ field.label_tag }}
+                            {{ field }}
+                        </div>
+                        {% endfor %}
+
+                        {% for field in form2 %}
+                        <div class="form-group has-feedback">
+                            {{ field.errors }}
+                            {{ field.label_tag }}
+                            {{ field }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="none" class="btn btn-danger" data-dismiss="modal">Fermer</button>
+                        <button type="submit" name="reg"
+                            onclick="return confirm('Are you sure the details provided are correct?\nYou will NOT be allowed to make modifications.')"
+                            class="btn btn-success">Sauvegarder</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
